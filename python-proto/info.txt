@@ -1,0 +1,26 @@
+COMPILER FLOW
+
+1. Lexer: convert text code to ID'd tokens
+    Take in text, identify consecutive strings of same-type characters, and add them to the tokens list as a tuple with the type and the consecutive string
+
+2. Parser: convert raw tokens to semantically accurate structures
+    Take in tokens from the lexer and handle things such as identifying what's a variable, what's a keyword, what are parametric expressions and arguments, etc.
+
+3. Parser: convert raw ID'd tokens into an AST
+    Take in parsed tokens and create an AST, handling things such as parenthesis groups and order of ops. Oxide's AST should be free of unreachable code. Likely will be handled in two steps:
+        3.A: generate a raw AST
+        3.B: read through AST, prune off unreachable branches through some kind of tree-traversal
+
+4. Intermediate representation: parse AST into bytecode
+    Read through the AST and turn it into bytecode. Oxide's bytecode should be optimized to have as few instructions as possible and use as few instructions as possible. This will likely be done in two parts:
+        4.A: Parse into proto-bytecode. Essentially raw instructions. Likely won't actually be valid bytecode, just bytecode that's descriptive and patterned enough to be handled in the next step
+        4.B: Read the proto and collect instructions into specialized bytecode to create smaller and more efficient bytecode. The specialized bytecode is intended to turn the proto into bytecode that can be handled more quickly in codegen and outputs less assembly.
+
+5. Codegen: convert bytecode into target assembly code
+    Read through bytecode and convert it to assembly code. The assembly in Oxide's binaries should be both as minimal and as fast as possible.
+        Memory efficiency: this will likely have to be refined on my own time. This will include using instruction sequences that are as minimal as possible to complete tasks.
+        Execution efficiency: this needs to be through understanding of how instructions work. For example: using the stack is orders faster than using the heap.
+
+6. Cleanup: final validity checks
+    Optional step, enabled with a compiler flag (likely "--safe").
+    Due to the nature and heavy optimization, volatile or dangerous code isn't impossible. Therefore, it's a good idea to have some small sanity checks to ensure that the binaries won't create bad behaviors, like memory breaks, unused memory, fires, or explosions. Normal stuff like that.

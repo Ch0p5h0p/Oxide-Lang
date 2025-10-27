@@ -3,7 +3,7 @@ COMPILER FLOW
 1. Lexer: convert text code to ID'd tokens
     Take in text, identify consecutive strings of same-type characters, and add them to the tokens list as a tuple with the type and the consecutive string
 
-2. Parser: convert raw tokens to semantically accurate structures
+2. Resolver: convert raw tokens to semantically accurate structures
     Take in tokens from the lexer and handle things such as identifying what's a variable, what's a keyword, what are parametric expressions and arguments, etc.
 
 3. Parser: convert raw ID'd tokens into an AST

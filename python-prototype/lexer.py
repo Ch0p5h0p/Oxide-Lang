@@ -1,8 +1,8 @@
-class TOKENS:
+class TOKENTYPES:
     operators=[*"+-*/"]
     letters=[*"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"]
     digits=[*"1234567890"]
-    delims=[*"{}[]()\'\""]
+    delims=[*"{}[]()\'\","]
     special=[*".;"]
 
 class Lexer:
@@ -15,15 +15,15 @@ class Lexer:
         while True:
             #print(f"LEXER: {self.i:<3} | TOKENS: {self.tokens}")
             current=self.code[self.i]
-            if current in TOKENS.operators:
+            if current in TOKENTYPES.operators:
                 self.lexType("operator")
-            elif current in TOKENS.digits:
+            elif current in TOKENTYPES.digits:
                 self.lexType("digit")
-            elif current in TOKENS.letters:
+            elif current in TOKENTYPES.letters:
                 self.lexType("string")
-            elif current in TOKENS.delims:
+            elif current in TOKENTYPES.delims:
                 self.lexType("delim")
-            elif current in TOKENS.special:
+            elif current in TOKENTYPES.special:
                 self.lexType("special")
             self.i+=1
             if self.i>=len(self.code):
@@ -36,7 +36,7 @@ class Lexer:
         elif t=="digit":
             buffer=[]
             j=0
-            while self.code[self.i+j] in TOKENS.digits:
+            while self.code[self.i+j] in TOKENTYPES.digits:
                 buffer.append(self.code[self.i+j])
                 j+=1
             self.tokens.append(("NUM","".join(buffer)))
@@ -44,10 +44,10 @@ class Lexer:
         elif t=="string":
             buffer=[]
             j=0
-            while self.code[self.i+j] in TOKENS.letters:
+            while self.code[self.i+j] in TOKENTYPES.letters:
                 buffer.append(self.code[self.i+j])
                 j+=1
-            self.tokens.append(("STR","".join(buffer)))
+            self.tokens.append(("LETTER","".join(buffer)))
             self.i+=j-1
         elif t=="delim":
             self.tokens.append(("DELIM",self.code[self.i]))
@@ -57,37 +57,38 @@ class Lexer:
     def __str__(self):
         return f"\"{self.code}\" -> {self.tokens}"
 
-c="1234.abcd ({[]}) +/-* 123+abc *12b63;"
-'''
-EXPECTED:
-NUM 1234
-STR abcd
-DELIM (
-DELIM {
-DELIM [
-DELIM ]
-DELIM }
-DELIM )
-OPERATOR +
-OPERATOR /
-OPERATOR -
-OPERATOR *
-NUM 123
-OPERATOR +
-STR abc
-OPERATOR *
-NUM 12
-STR b
-NUM 63
-BREAK
-'''
-l=Lexer(c)
-t=l.lex()
-print(l)
+if __name__=="__main__":
+    c="1234.abcd ({[]}) +/-* 123+abc *12b63;"
+    '''
+    EXPECTED:
+    NUM 1234
+    LETTER abcd
+    DELIM (
+    DELIM {
+    DELIM [
+    DELIM ]
+    DELIM }
+    DELIM )
+    OPERATOR +
+    OPERATOR /
+    OPERATOR -
+    OPERATOR *
+    NUM 123
+    OPERATOR +
+    LETTER abc
+    OPERATOR *
+    NUM 12
+    LETTER b
+    NUM 63
+    BREAK
+    '''
+    l=Lexer(c)
+    t=l.lex()
+    print(l)
 
-out=r""
-for i in t:
-    out+=i[1]
-    out+=" "
+    out=r""
+    for i in t:
+        out+=i[1]
+        out+=" "
 
-print(out)
+    print(out)

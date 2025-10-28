@@ -24,11 +24,6 @@ class Resolver:
                 self.i+=self.i+group[1]
             elif current[1] in DEFS.closers:
                 raise Exception(f"Resolver error: hanging closing delimiter {current[1]}")
-            # TODO: implement string parsing (similar to groups)
-            elif current[1] in DEFS.strdelims:
-                string=self.parseString(self.tokens[self.i:])
-                self.resolved.append(string[0])
-                self.i+=self.i+string[1]
             else:
                 self.resolved.append(("VALUE",self.tokens[self.i]))
             self.i+=1
@@ -57,19 +52,6 @@ class Resolver:
                 return (t, buffer), j
             elif toks[j][1] in DEFS.keywords:
                 buffer.append(("KW",toks[j]))
-            else:
-                buffer.append(("VAL",toks[j]))
-            j+=1
-
-    def parseString(self, toks):
-        print("Opening string")
-        j=1
-        buffer=[]
-        quote=toks[0][1]
-        while True:
-            if toks[j][1]==quote:
-                print("Closing string")
-                return ("STR",buffer),j
             else:
                 buffer.append(("VAL",toks[j]))
             j+=1

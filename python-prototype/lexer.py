@@ -20,9 +20,12 @@ class Lexer:
             elif current in TOKENTYPES.digits:
                 self.lexType("digit")
             elif current in TOKENTYPES.letters:
-                self.lexType("string")
+                self.lexType("letters")
             elif current in TOKENTYPES.delims:
-                self.lexType("delim")
+                if current=="\"" or current=="\'":
+                    self.lexType("string")
+                else:
+                    self.lexType("delim")
             elif current in TOKENTYPES.special:
                 self.lexType("special")
             self.i+=1
@@ -41,14 +44,26 @@ class Lexer:
                 j+=1
             self.tokens.append(("NUM","".join(buffer)))
             self.i+=j-1
-        elif t=="string":
+        elif t=="letters":
             buffer=[]
             j=0
             while self.code[self.i+j] in TOKENTYPES.letters:
                 buffer.append(self.code[self.i+j])
                 j+=1
-            self.tokens.append(("LETTER","".join(buffer)))
+            self.tokens.append(("LETTERS","".join(buffer)))
             self.i+=j-1
+        elif t=="string":
+            buffer=""
+            j=1
+            while True:
+                print(self.code[self.i+j] in ["\"","\'"])
+                if self.code[self.i+j] in ["\"","\'"]:
+                    break
+                else:
+                    buffer+=self.code[self.i+j]
+                    j+=1
+            self.tokens.append(("STR",buffer))
+            self.i+=j
         elif t=="delim":
             self.tokens.append(("DELIM",self.code[self.i]))
         elif t=="special":

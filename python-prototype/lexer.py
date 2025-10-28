@@ -1,9 +1,10 @@
 class TOKENTYPES:
-    operators=[*"+-*/"]
+    operators=[*"+-*/="]
     letters=[*"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"]
     digits=[*"1234567890"]
     delims=[*"{}[]()\'\","]
     special=[*".;"]
+    hint=[*":"]
 
 class Lexer:
     def __init__(self, code):
@@ -21,6 +22,8 @@ class Lexer:
                 self.lexType("digit")
             elif current in TOKENTYPES.letters:
                 self.lexType("letters")
+            elif current in TOKENTYPES.hint:
+                self.lexType("hint")
             elif current in TOKENTYPES.delims:
                 if current=="\"" or current=="\'":
                     self.lexType("string")
@@ -34,8 +37,13 @@ class Lexer:
         return self.tokens
 
     def lexType(self,t):
+        print(f"{self.i}: {self.code[self.i]} ({t})")
         if t=="operator":
-            self.tokens.append(("OPERATOR",self.code[self.i]))
+            if self.i<(len(self.code)-1) and self.code[self.i+1]=="=":
+                self.tokens.append(("OPERATOR",self.code[self.i]+"="))
+                self.i+=1
+            else:
+                self.tokens.append(("OPERATOR",self.code[self.i]))
         elif t=="digit":
             buffer=[]
             j=0
@@ -50,14 +58,18 @@ class Lexer:
             while self.code[self.i+j] in TOKENTYPES.letters:
                 buffer.append(self.code[self.i+j])
                 j+=1
+                if self.i+j==len(self.code): break
             self.tokens.append(("LETTERS","".join(buffer)))
             self.i+=j-1
+        elif t=="hint":
+            self.tokens.append(("HINT",self.code[self.i+1:self.i+4]))
+            self.i+=3
         elif t=="string":
             buffer=""
+            quote=self.code[self.i]
             j=1
             while True:
-                print(self.code[self.i+j] in ["\"","\'"])
-                if self.code[self.i+j] in ["\"","\'"]:
+                if self.code[self.i+j]==quote:
                     break
                 else:
                     buffer+=self.code[self.i+j]

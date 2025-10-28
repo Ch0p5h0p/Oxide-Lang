@@ -1,0 +1,19 @@
+OXIDE LANGUAGE PLANNING
+
+In Oxide, we have a singular keyword for defining both variables and functions: df. This seems like an odd choice, so let me unpack a bit.
+
+We don't have functions anymore. Instead, we have parametric expressions. These are written like so:
+
+df add = (x,y){ret x+y}
+
+Or more cleanly:
+
+df add = (x,y){
+    ret x+y
+}
+
+Essentially, parametric expressions have a few parts:
+
+df name = (parameters){expression}
+
+Expressions are essentially very similar to functions, except they don't have access outside of their scope. Basically, the only windows an expression has to the outside code are the parameters and the return

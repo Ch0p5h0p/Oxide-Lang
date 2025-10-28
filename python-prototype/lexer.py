@@ -37,7 +37,7 @@ class Lexer:
         return self.tokens
 
     def lexType(self,t):
-        print(f"{self.i}: {self.code[self.i]} ({t})")
+        #print(f"{self.i}: {self.code[self.i]} ({t})")
         if t=="operator":
             if self.i<(len(self.code)-1) and self.code[self.i+1]=="=":
                 self.tokens.append(("OPERATOR",self.code[self.i]+"="))

@@ -16,7 +16,7 @@ class Resolver:
             if self.i>=len(self.tokens):
                 break
             current=self.tokens[self.i]
-            print(current)
+            #print(current)
             #print(f"{self.i}/{len(self.tokens)}")
             if current[1] in DEFS.keywords:
                 self.resolved.append(("KW", current))
@@ -48,7 +48,7 @@ class Resolver:
         elif opener=="[":
             t="ARR"
         while True:
-            print(f"{'|'*self.recurse_count}{toks[j]}")
+            #print(f"{'|'*self.recurse_count}{toks[j]}")
             if toks[j][1] in DEFS.openers:
                 self.recurse_count+=1
                 group=self.parseGroup(toks[j:])

@@ -1,0 +1,13 @@
+PROTO-BYTECODE
+
+
+BYTECODE
+
+
+ASSEMBLY
+(Currently targetting Linux x86. Other platforms later.)
+- Acessing the stack is faster than both accessing .bss and accessing the heap.
+- Force all variables into 32 bits (4 bytes). Push them onto the stack to be accessed via their index times 4 bytes. For example: when you allocate two variables, you access the first by RSP+8 and the second by RSP+4
+- A NOTE ON THE PREVIOUS: during codegen, you SHOULD NOT BE COMPUTING VALUES IN THE ASSEMBLY CODE. Do NOT tell the assembly code to grab the variable at RSP+(index*4). Tell it to grab the variable at RSP+4 or RSP+8. DON'T MAKE YOUR LIFE HARDER.
+- "global" variables (variables initialized in the global scope that don't disappear after a function closes) go to `.bss`
+- OPTIMIZE OPERATIONS WITH TEMPS. If you have a local variable that only depends on one argument, DON'T USE STACK SPACE. Shove that sucker into the argument's register and call it a day. BUT: if you have 2+ temps depending on the arg, you need to use stack space, because you need the argument for both variables, so you can't overwrite the register containing it.

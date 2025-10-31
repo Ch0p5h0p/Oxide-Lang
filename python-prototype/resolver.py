@@ -18,7 +18,9 @@ class Resolver:
             current=self.tokens[self.i]
             #print(current)
             #print(f"{self.i}/{len(self.tokens)}")
-            if current[1] in DEFS.keywords:
+            if current[1]==";":
+                self.resolved.append(("EXPR_BREAK",current))
+            elif current[1] in DEFS.keywords:
                 self.resolved.append(("KW", current))
             elif current[0]=="OPERATOR":
                 self.resolved.append(("INLINE_OP", current))

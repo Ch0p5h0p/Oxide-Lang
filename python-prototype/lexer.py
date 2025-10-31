@@ -1,10 +1,11 @@
 class TOKENTYPES:
-    operators=[*"+-*/="]
+    operators=[*"+-*/=&|^!"] # those final four are binary AND, OR, XOR, and NOT
     letters=[*"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"]
     digits=[*"1234567890"]
     delims=[*"{}[]()\'\","]
-    special=[*".;"]
-    hint=[*":"]
+    special=[*".;@"] # @ is for getting the value at an address, ~ is for getting the address of a variable. For example: @0x5f2c gives you a value (say 7), while ~x gives you the address of x.
+    hint=[*":"] # for hinting int types. May evolve further. EX: unsigned 32 bit would be :u32, signed 32 would be :i32. You would do x:u32. This is for user-side optimization and forcing variables to specific constraints, such as x:u16 forcing x to be a 2-byte val.
+    # A note on type hints: because I'm a DUMMY, there has to be a number with two places after the u. No more, no less. As such, only 16, 32, and 64 are available. MB :P
 
 class Lexer:
     def __init__(self, code):

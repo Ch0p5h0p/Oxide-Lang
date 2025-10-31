@@ -17,3 +17,7 @@ Essentially, parametric expressions have a few parts:
 df name = (parameters){expression}
 
 Expressions are essentially very similar to functions, except they don't have access outside of their scope. Basically, the only windows an expression has to the outside code are the parameters and the return
+
+Why did I do this? I did it to make compiling easier XD. Why not have one keyword for defining variables and functions? This way, we can simplify the process of generating an AST by just simply assigning values to names instead of separating functions and variables from each other. This will probably be separated out in the IR stage, where expressions are split off from variables to create functions.
+
+I'm currently considering scrapping this idea and going back to defining functions and variables separately.

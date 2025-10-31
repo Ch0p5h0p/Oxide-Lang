@@ -1,6 +1,6 @@
 # Oxide
 
-Oxide is a language designed for devices with memory and storage restrictions.
+Oxide is a language designed to both be quick and to produce small binaries.
 
 > [!NOTE]
 > Oxide is still very early in development! Feel free to star this repo to see updates, though. I'll work on it when I have time. College is hard 😅
